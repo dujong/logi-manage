@@ -1,0 +1,26 @@
+server:
+  port: 8081
+
+spring:
+  application:
+    name: product-service
+
+  security:
+    user:
+      name: admin
+      password: 1234mst
+
+eureka:
+  client:
+    #eureka ??? ?? ??
+    register-with-eureka: true
+    #eureka ????? ?????? ??? ??? ??? ???? ??
+    fetch-registry: true
+    #eureke ?? ??? ??????? ?? ??
+    service-url:
+      defaultZone: http://admin:1234mst@localhost:8761/eureka
+
+  instance:
+    instance-id: ${spring.cloud.client.hostname}:${spring.application.instance_id:${random.value}}
+
+

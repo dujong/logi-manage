@@ -1,0 +1,89 @@
+server:
+  port: 8000
+
+
+eureka:
+  client:
+    #eureka 서버에 등록 여부
+    register-with-eureka: true
+    #eureka 서버로부터 인스턴들의 정보를 가져올 것인지 설정하는 속성
+    fetch-registry: true
+    service-url:
+      defaultZone: http://admin1234mst@localhost:8761/eureka
+
+spring:
+  application:
+    name: apigateway-service
+
+  cloud:
+    gateway:
+      #??? ??
+      routes:
+        - id: product-service
+          uri: http://localhost:8081/
+          predicates:
+            - Path=/product-service/**
+          filters:
+            - RewritePath=/product-service/(?<segment>.*),/$\{segment}
+            - name: AuthorizationHeaderFilter
+              args:
+                headerName: Authorization
+                granted: Bearer
+
+        - id: procurement-service
+          uri: http://localhost:8082/
+          predicates:
+            - Path=/procurement-service/**
+          filters:
+            - RewritePath=/procurement-service/(?<segment>.*),/$\{segment}
+            - name: AuthorizationHeaderFilter
+              args:
+                headerName: Authorization
+                granted: Bearer
+
+        - id: order-fulfillment-service
+          uri: http://localhost:8083/
+          predicates:
+            - Path=/order-fulfillment-service/**
+          filters:
+            - RewritePath=/order-fulfillment-service/(?<segment>.*),/$\{segment}
+            - name: AuthorizationHeaderFilter
+              args:
+                headerName: Authorization
+                granted: Bearer
+
+        - id: inventory-service
+          uri: http://localhost:8084/
+          predicates:
+            - Path=/inventory-service/**
+          filters:
+            - RewritePath=/inventory-service/(?<segment>.*),/$\{segment}
+            - name: AuthorizationHeaderFilter
+              args:
+                headerName: Authorization
+                granted: Bearer
+
+        - id: dashboard-service
+          uri: http://localhost:8085/
+          predicates:
+            - Path=/dashboard-service/**
+          filters:
+            - RewritePath=/dashboard-service/(?<segment>.*),/$\{segment}
+            - name: AuthorizationHeaderFilter
+              args:
+                headerName: Authorization
+                granted: Bearer
+
+        - id: auth-user-service
+          uri: http://localhost:8085/
+          predicates:
+            - Path=/auth-user-service/**
+          filters:
+            - RewritePath=/auth-user-service/(?<segment>.*),/$\{segment}
+            - name: AuthorizationHeaderFilter
+              args:
+                headerName: Authorization
+                granted: Bearer
+
+jwt:
+  secret: c2lsdmVybmluZS10ZWNoLXNwcmluZy1ib290LWp3dC10dXRvcmlhbC1zZWNyZXQtc2lsdmVybmluZS10ZWNoLXNwcmluZy1ib290LWp3dC10dXRvcmlhbC1zZWNyZXQK

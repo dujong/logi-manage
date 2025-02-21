@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/com.logi-manage.dashboard-service.main.iml" filepath="$PROJECT_DIR$/.idea/modules/com.logi-manage.dashboard-service.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/com.logi-manage.eureka-server.main.iml" filepath="$PROJECT_DIR$/.idea/modules/com.logi-manage.eureka-server.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/com.logi-manage.inventory-service.main.iml" filepath="$PROJECT_DIR$/.idea/modules/com.logi-manage.inventory-service.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/com.logi-manage.order-fulfillment-service.main.iml" filepath="$PROJECT_DIR$/.idea/modules/com.logi-manage.order-fulfillment-service.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/com.logi-manage.procurement-service.main.iml" filepath="$PROJECT_DIR$/.idea/modules/com.logi-manage.procurement-service.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/com.logi-manage.product-service.main.iml" filepath="$PROJECT_DIR$/.idea/modules/com.logi-manage.product-service.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/dashboard-service.main.iml" filepath="$PROJECT_DIR$/.idea/modules/dashboard-service.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/eureka-server.main.iml" filepath="$PROJECT_DIR$/.idea/modules/eureka-server.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/inventory-service.main.iml" filepath="$PROJECT_DIR$/.idea/modules/inventory-service.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/logi-manage.iml" filepath="$PROJECT_DIR$/.idea/logi-manage.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/order-fulfillment-service.main.iml" filepath="$PROJECT_DIR$/.idea/modules/order-fulfillment-service.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/procurement-service.main.iml" filepath="$PROJECT_DIR$/.idea/modules/procurement-service.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/product-service.main.iml" filepath="$PROJECT_DIR$/.idea/modules/product-service.main.iml" />
+    </modules>
+  </component>
+</project>
