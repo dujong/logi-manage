@@ -1,6 +1,6 @@
-package com.logi_manage.auth_user_service.auth;
+package com.logi_manage.auth_user_service.config;
 
-import com.logi_manage.auth_user_service.auth.jwt.JwtAuthenticationFilter;
+import com.logi_manage.auth_user_service.auth.JwtAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

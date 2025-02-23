@@ -1,7 +1,7 @@
-package com.logi_manage.auth_user_service.auth.jwt;
+package com.logi_manage.auth_user_service.auth;
 
 import com.auth0.jwt.interfaces.DecodedJWT;
-import com.logi_manage.auth_user_service.entity.Users;
+import com.logi_manage.auth_user_service.constant.TokenValid;
 import com.logi_manage.auth_user_service.repository.UserRepository;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -28,9 +28,17 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+        //헤더에서 토큰 추출
+        String accessToken = jwtProvider.extractTokenToRequestHeader(request);
+        TokenValid accessTokenValid = jwtProvider.verifyToken(accessToken);
+
+        //accessToken 유효
+        if (accessTokenValid == TokenValid.VALID) {
+
+        }
+
         try {
-            //헤더에서 토큰 추출
-            String token = jwtProvider.extractToken(request);
+
 
             //토큰 유효성 검사 및 인증
             if (token != null && jwtProvider.verifyToken(token) != null) {
@@ -40,8 +48,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
                 userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("User not found"));
 
-                Authentication authentication = new UsernamePasswordAuthenticationToken(userId, null, Collections.singletonList(new SimpleGrantedAuthority(role)));
-                SecurityContextHolder.getContext().setAuthentication(authentication);
             }
 
         } catch (Exception e) {
@@ -49,5 +55,14 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         }
 
         filterChain.doFilter(request, response);
+    }
+
+    private void setAuthentication(String accessToken) {
+        Authentication authentication = jwtProvider.getAuthentication(accessToken);
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+    }
+
+    private void handleTimeoutToken(HttpServletRequest request, HttpServletResponse response, String accessToken) {
+
     }
 }
