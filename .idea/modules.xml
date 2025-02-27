@@ -9,7 +9,6 @@
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/com.logi-manage.procurement-service.main.iml" filepath="$PROJECT_DIR$/.idea/modules/com.logi-manage.procurement-service.main.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/com.logi-manage.product-service.main.iml" filepath="$PROJECT_DIR$/.idea/modules/com.logi-manage.product-service.main.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/dashboard-service.main.iml" filepath="$PROJECT_DIR$/.idea/modules/dashboard-service.main.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/eureka-server.main.iml" filepath="$PROJECT_DIR$/.idea/modules/eureka-server.main.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/inventory-service.main.iml" filepath="$PROJECT_DIR$/.idea/modules/inventory-service.main.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/logi-manage.iml" filepath="$PROJECT_DIR$/.idea/logi-manage.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/order-fulfillment-service.main.iml" filepath="$PROJECT_DIR$/.idea/modules/order-fulfillment-service.main.iml" />

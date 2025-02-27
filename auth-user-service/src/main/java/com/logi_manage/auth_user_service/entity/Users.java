@@ -24,15 +24,19 @@ public class Users {
     @Column(name = "user_id")
     private Long id;
 
+    //이메일
     @Column(nullable = false, unique = true, length = 32)
     private String email;
 
+    //패스워드
     @Column(nullable = false, length = 60)
     private String password;
 
+    //이름
     @Column(nullable = false, length = 5)
     private String name;
 
+    //권한
     @Enumerated(value = EnumType.STRING)
     private Role role;
 

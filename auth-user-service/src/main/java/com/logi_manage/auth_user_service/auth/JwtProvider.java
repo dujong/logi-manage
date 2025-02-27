@@ -5,7 +5,6 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.exceptions.TokenExpiredException;
 import com.auth0.jwt.interfaces.DecodedJWT;
-import com.logi_manage.auth_user_service.constant.Role;
 import com.logi_manage.auth_user_service.constant.TokenValid;
 import com.logi_manage.auth_user_service.entity.Token;
 import com.logi_manage.auth_user_service.entity.Users;
@@ -179,5 +178,8 @@ public class JwtProvider {
                 .map(header -> header.replace(BEARER, ""));
     }
 
-
+    @Transactional(readOnly = true)
+    public Token getRefreshToken(String accessToken) {
+        return tokenRepository.findByAccessToken(accessToken).orElse(null);
+    }
 }
