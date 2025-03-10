@@ -16,7 +16,7 @@ public record OrderDetailResponseDto(
         //주문 상태
         OrderStatus orderStatus,
         //주문 아이템
-        List<OrderItem> orderItemList,
+        List<OrderItemDetailResponseDto> orderItemList,
         //주문 날짜
         LocalDateTime createdAt
 ) {

@@ -8,10 +8,10 @@ import com.logi_manage.order_service.service.OrderService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.awt.print.Pageable;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -24,7 +24,7 @@ public class OrderController {
      * list up
      * - [O]  주문 생성
      * - [O]  주문 상태 변경 (대기 → 처리중 → 완료)
-     * - [ ]  주문 취소 및 조회
+     * - [O]  주문 취소 및 조회
      */
 
     /**
@@ -59,6 +59,12 @@ public class OrderController {
         return ResponseEntity.noContent().build();
     }
 
+    /**
+     * 주문 리스트 조회
+     * @param filterRequestDto 필터링 dto
+     * @param pageable 페이징
+     * @return 주문 list
+     */
     @GetMapping
     public ResponseEntity<?> getOrderList(OrderFilterRequestDto filterRequestDto, Pageable pageable) {
         Page<OrderDetailResponseDto> orderList = orderService.getOrderList(filterRequestDto, pageable);

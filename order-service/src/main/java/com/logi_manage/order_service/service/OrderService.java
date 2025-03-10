@@ -5,8 +5,7 @@ import com.logi_manage.order_service.dto.request.OrderFilterRequestDto;
 import com.logi_manage.order_service.dto.request.UpdateOrderStatusRequestDto;
 import com.logi_manage.order_service.dto.response.OrderDetailResponseDto;
 import org.springframework.data.domain.Page;
-
-import java.awt.print.Pageable;
+import org.springframework.data.domain.Pageable;
 
 public interface OrderService {
     Long createOrder(CreateOrderRequestDto createOrderRequestDto);
