@@ -75,9 +75,20 @@ spring:
                 granted: Bearer
 
         - id: auth-user-service
-          uri: http://localhost:8085/
+          uri: http://localhost:8086/
           predicates:
             - Path=/auth-user-service/**
+          filters:
+            - RewritePath=/auth-user-service/(?<segment>.*),/$\{segment}
+            - name: AuthorizationHeaderFilter
+              args:
+                headerName: Authorization
+                granted: Bearer
+
+        - id: order-service
+          uri: http://localhost:8087/
+          predicates:
+            - Path=/order-service/**
           filters:
             - RewritePath=/auth-user-service/(?<segment>.*),/$\{segment}
             - name: AuthorizationHeaderFilter
