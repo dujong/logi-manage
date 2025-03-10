@@ -26,8 +26,7 @@ public class Product {
     private String name;
 
     //가격
-    @Column(nullable = false)
-    private Long price;
+    private long price;
 
     //상품 설명
     private String description;
