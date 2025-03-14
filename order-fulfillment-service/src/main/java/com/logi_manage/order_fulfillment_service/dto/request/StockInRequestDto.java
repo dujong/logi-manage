@@ -7,11 +7,9 @@ public record StockInRequestDto(
         Long orderId,
         //상품 id
         Long productId,
-        //상품 수량
-        int quantity,
         //창고 id
         Long warehouseId,
-        //입고 상태
-        OrderFulfillmentStatus orderFulfillmentStatus
+        //상품 수량
+        int quantity
 ) {
 }
