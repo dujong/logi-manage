@@ -16,6 +16,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
+
 @Slf4j
 @Transactional
 @RequiredArgsConstructor
@@ -72,6 +74,22 @@ public class InventoryServiceImpl implements InventoryService{
     @Override
     public Page<InventoryDetailResponseDto> getInventoryList(InventoryFilterRequestDto filterRequestDto, Pageable pageable) {
         return inventoryRepository.findInventoryWithFilterAndSorting(filterRequestDto.warehouseId(), filterRequestDto.productId(), pageable);
+    }
+
+    /**
+     * 재고 상세 조회
+     * @param productId 상품 id
+     * @param warehouseId 창고 id
+     * @return 재고 상세 info
+     */
+    @Override
+    public InventoryDetailResponseDto getInventoryByProductAndWarehouse(Long productId, Long warehouseId) {
+        Inventory inventory = inventoryRepository.findByProductIdAndWarehouseId(productId, warehouseId).orElse(null);
+        if (inventory == null) {
+            return null;
+        }
+
+        return new InventoryDetailResponseDto(inventory.getId(), inventory.getProductId(), inventory.getQuantity(), Optional.ofNullable(inventory.getWarehouse()).map(Warehouse::getId).orElse(null));
     }
 
     /**
