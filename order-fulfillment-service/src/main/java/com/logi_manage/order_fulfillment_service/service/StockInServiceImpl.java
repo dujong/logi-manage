@@ -6,10 +6,7 @@ import com.logi_manage.order_fulfillment_service.dto.request.StockInFilterReques
 import com.logi_manage.order_fulfillment_service.dto.request.StockInRequestDto;
 import com.logi_manage.order_fulfillment_service.dto.request.StockInVerifyRequestDto;
 import com.logi_manage.order_fulfillment_service.dto.request.UpdateStockInRequestDto;
-import com.logi_manage.order_fulfillment_service.dto.response.InventoryDetailResponseDto;
-import com.logi_manage.order_fulfillment_service.dto.response.OrderDetailResponseDto;
-import com.logi_manage.order_fulfillment_service.dto.response.ProductDetailResponseDto;
-import com.logi_manage.order_fulfillment_service.dto.response.WarehouseDetailResponseDto;
+import com.logi_manage.order_fulfillment_service.dto.response.*;
 import com.logi_manage.order_fulfillment_service.entity.StockIn;
 import com.logi_manage.order_fulfillment_service.repository.OrderFulfillmentRepository;
 import com.logi_manage.order_fulfillment_service.repository.StockInRepository;
@@ -125,10 +122,14 @@ public class StockInServiceImpl implements StockInService{
         return ResponseEntity.noContent().build();
     }
 
+    /**
+     * 입고 리스트 조회
+     * @param filterRequestDto 필터링 dto
+     * @param pageable 페이징
+     * @return 입고 리스트
+     */
     @Override
-    public Page<?> getStockInList(StockInFilterRequestDto filterRequestDto, Pageable pageable) {
-
-        stockInRepository.findOrderFulfillmentWithFilterAndSorting(filterRequestDto.productId(), filterRequestDto.warehouseId(), filterRequestDto.orderId(), filterRequestDto.status(), filterRequestDto.dateFrom(), filterRequestDto.dateTo(), pageable);
-        return null;
+    public Page<StockInDetailResponseDto> getStockInList(StockInFilterRequestDto filterRequestDto, Pageable pageable) {
+        return stockInRepository.findStockInWithFilterAndSorting(filterRequestDto.productId(), filterRequestDto.warehouseId(), filterRequestDto.orderId(), filterRequestDto.status(), filterRequestDto.dateFrom(), filterRequestDto.dateTo(), pageable);
     }
 }

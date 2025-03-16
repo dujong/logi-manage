@@ -4,6 +4,7 @@ import com.logi_manage.order_fulfillment_service.dto.request.StockInFilterReques
 import com.logi_manage.order_fulfillment_service.dto.request.StockInRequestDto;
 import com.logi_manage.order_fulfillment_service.dto.request.StockInVerifyRequestDto;
 import com.logi_manage.order_fulfillment_service.dto.request.UpdateStockInRequestDto;
+import com.logi_manage.order_fulfillment_service.dto.response.StockInDetailResponseDto;
 import com.logi_manage.order_fulfillment_service.service.StockInService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -17,10 +18,6 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/stock-in")
 public class StockInController {
-//    발주된 상품 입고 처리	POST	/api/stock-in	발주된 상품을 입고 요청
-//    입고 검수 및 승인	PUT	/api/stock-in/verify	입고 검수를 수행하고 승인
-//    입고 기록 조회	GET	/api/stock-in/history	입고 내역 조회
-
     private final StockInService stockInService;
 
     /**
@@ -52,9 +49,15 @@ public class StockInController {
         return stockInService.updateStockInQuantity(stockId, updateStockInRequestDto);
     }
 
+    /**
+     * 입고 리스트 조회
+     * @param filterRequestDto 필터링 dto
+     * @param pageable 페이징
+     * @return 입고 리스트
+     */
     @GetMapping("/history")
-    public ResponseEntity<Page<?>> getOrderFulfillmentList(StockInFilterRequestDto filterRequestDto, Pageable pageable) {
-        Page<?> orderFulfillmentList = stockInService.getStockInList(filterRequestDto, pageable);
-        return ResponseEntity.ok(orderFulfillmentList);
+    public ResponseEntity<Page<StockInDetailResponseDto>> getOrderFulfillmentList(StockInFilterRequestDto filterRequestDto, Pageable pageable) {
+        Page<StockInDetailResponseDto> stockInList = stockInService.getStockInList(filterRequestDto, pageable);
+        return ResponseEntity.ok(stockInList);
     }
 }

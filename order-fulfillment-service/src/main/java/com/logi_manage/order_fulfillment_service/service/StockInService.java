@@ -4,6 +4,7 @@ import com.logi_manage.order_fulfillment_service.dto.request.StockInFilterReques
 import com.logi_manage.order_fulfillment_service.dto.request.StockInRequestDto;
 import com.logi_manage.order_fulfillment_service.dto.request.StockInVerifyRequestDto;
 import com.logi_manage.order_fulfillment_service.dto.request.UpdateStockInRequestDto;
+import com.logi_manage.order_fulfillment_service.dto.response.StockInDetailResponseDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
@@ -15,5 +16,5 @@ public interface StockInService {
 
     ResponseEntity<String> updateStockInQuantity(Long stockId, UpdateStockInRequestDto updateStockInRequestDto);
 
-    Page<?> getStockInList(StockInFilterRequestDto filterRequestDto, Pageable pageable);
+    Page<StockInDetailResponseDto> getStockInList(StockInFilterRequestDto filterRequestDto, Pageable pageable);
 }

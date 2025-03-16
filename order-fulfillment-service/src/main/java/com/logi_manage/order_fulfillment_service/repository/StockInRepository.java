@@ -1,6 +1,7 @@
 package com.logi_manage.order_fulfillment_service.repository;
 
 import com.logi_manage.order_fulfillment_service.constant.StockInStatus;
+import com.logi_manage.order_fulfillment_service.dto.response.StockInDetailResponseDto;
 import com.logi_manage.order_fulfillment_service.entity.StockIn;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -27,7 +28,7 @@ public interface StockInRepository extends JpaRepository<StockIn, Long> {
 
 
     )
-    Page<?> findOrderFulfillmentWithFilterAndSorting(
+    Page<StockInDetailResponseDto> findStockInWithFilterAndSorting(
             @Param("productId") Long productId,
             @Param("warehouseId") Long warehouseId,
             @Param("orderId") Long orderId,
