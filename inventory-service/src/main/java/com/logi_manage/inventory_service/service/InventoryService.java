@@ -14,6 +14,9 @@ public interface InventoryService {
     void deleteInventory(Long inventoryId);
 
     Page<InventoryDetailResponseDto> getInventoryList(InventoryFilterRequestDto filterRequestDto, Pageable pageable);
+
+    InventoryDetailResponseDto getInventoryByProductAndWarehouse(Long productId, Long warehouseId);
+
     void transferInventory(InventoryTransferRequestDto transferRequestDto);
 
     Page<TransferDetailResponseDto> getInventoryTransfers(TransferFilterRequestDto filterRequestDto, Pageable pageable);

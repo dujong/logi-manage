@@ -69,6 +69,23 @@ public class InventoryController {
     }
 
     /**
+     * 재고 상세 조회
+     * @param productId 상품 id
+     * @param warehouseId 창고 id
+     * @return 재고 상세 info
+     */
+    @GetMapping("/{productId}/{warehouseId}")
+    public ResponseEntity<InventoryDetailResponseDto> getInventory(@PathVariable Long productId, Long warehouseId) {
+        InventoryDetailResponseDto inventory = inventoryService.getInventoryByProductAndWarehouse(productId, warehouseId);
+
+        if (inventory == null) {
+            return ResponseEntity.notFound().build();
+        }
+
+        return ResponseEntity.ok(inventory);
+    }
+
+    /**
      * 재고 이동
      * @param transferRequestDto 재고 이동 dto
      */

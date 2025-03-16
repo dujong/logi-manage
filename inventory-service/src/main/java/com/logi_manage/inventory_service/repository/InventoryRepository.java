@@ -9,6 +9,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
 @Repository
 public interface InventoryRepository extends JpaRepository<Inventory, Long> {
     @Query("SELECT new com.logi_manage.inventory_service.dto.response.InventoryDetailResponseDto(i.id, i.productId, i.quantity, i.warehouse.id) " +
@@ -20,4 +22,6 @@ public interface InventoryRepository extends JpaRepository<Inventory, Long> {
             @Param("productId") Long productId,
             Pageable pageable
     );
+
+    Optional<Inventory> findByProductIdAndWarehouseId(Long productId, Long warehouseId);
 }
