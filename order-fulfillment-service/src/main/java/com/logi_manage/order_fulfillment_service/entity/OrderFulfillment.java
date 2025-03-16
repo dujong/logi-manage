@@ -23,15 +23,17 @@ public class OrderFulfillment {
     @Column(name = "order_fulfillment_id")
     private Long id;
 
-    //입출고 type
-    @Enumerated(value = EnumType.STRING)
-    private FulfillmentType type;
+    //출고 여부
+    private boolean fulfilled;
 
     //상품 id
     private Long productId;
 
     //창고 id
     private Long warehouseId;
+
+    //주문 id
+    private Long orderId;
 
     //입출고 수량
     private int quantity;
