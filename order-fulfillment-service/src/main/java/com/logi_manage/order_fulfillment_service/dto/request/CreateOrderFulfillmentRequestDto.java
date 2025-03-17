@@ -6,6 +6,8 @@ public record CreateOrderFulfillmentRequestDto(
         //창고 id
         Long warehouseId,
         //물건 id
-        Long productId
+        Long productId,
+        //주문 수량
+        int quantity
 ) {
 }

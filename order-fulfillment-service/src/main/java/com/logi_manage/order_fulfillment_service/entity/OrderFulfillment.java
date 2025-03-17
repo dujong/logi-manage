@@ -23,9 +23,6 @@ public class OrderFulfillment {
     @Column(name = "order_fulfillment_id")
     private Long id;
 
-    //출고 여부
-    private boolean fulfilled;
-
     //상품 id
     private Long productId;
 
@@ -40,7 +37,9 @@ public class OrderFulfillment {
 
     //처리 상태
     @Enumerated(value = EnumType.STRING)
-    private OrderFulfillmentStatus orderFulfillmentStatus;
+    private OrderFulfillmentStatus status;
+
+    private String remarks;
 
     @CreatedDate
     private LocalDateTime createdAt;
