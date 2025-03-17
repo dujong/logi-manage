@@ -14,7 +14,9 @@ import com.logi_manage.order_service.repository.OrderRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -45,7 +47,10 @@ public class OrderServiceImpl implements OrderService{
         //주문 생성 및 저장
         Order order = Order.builder()
                 .customer(customer)
-                .orderStatus(createOrderRequestDto.orderStatus())
+                .receiverName(createOrderRequestDto.receiverName())
+                .receiverPhone(createOrderRequestDto.receiverPhone())
+                .receiverAddress(createOrderRequestDto.receiverAddress())
+                .status(createOrderRequestDto.orderStatus())
                 .build();
         Order savedOrder = orderRepository.save(order);
 
@@ -76,7 +81,22 @@ public class OrderServiceImpl implements OrderService{
     @Override
     public void updateOrderStatus(Long orderId, UpdateOrderStatusRequestDto updateOrderStatusRequestDto) {
         Order order = orderRepository.findById(orderId).orElseThrow(() -> new IllegalArgumentException("Order not found"));
-        order.setOrderStatus(updateOrderStatusRequestDto.orderStatus());
+
+        if (updateOrderStatusRequestDto.receiverName() != null) {
+            order.setReceiverName(updateOrderStatusRequestDto.receiverName());
+        }
+
+        if (updateOrderStatusRequestDto.receiverPhone() != null) {
+            order.setReceiverPhone(updateOrderStatusRequestDto.receiverPhone());
+        }
+
+        if (updateOrderStatusRequestDto.receiverAddress() != null) {
+            order.setReceiverAddress(updateOrderStatusRequestDto.receiverAddress());
+        }
+
+        if (updateOrderStatusRequestDto.status() != null) {
+            order.setStatus(updateOrderStatusRequestDto.status());
+        }
     }
 
     /**
@@ -107,7 +127,14 @@ public class OrderServiceImpl implements OrderService{
         // 물류/재고 웹 사이트 특성상 대용량의 데이터를 만질 가능성이 커서 성능을 초점에 두고 개발하였다
 
         //1. 주문 목록을 페이징 처리하여 가져오기
-        Page<OrderDetailResponseDto> orderWithFilterAndSorting = orderRepository.findOrderWithFilterAndSorting(filterRequestDto.orderId(), filterRequestDto.customerId(), filterRequestDto.productId(), filterRequestDto.dateFrom(), filterRequestDto.dateTo(), pageable);
+        Sort sort;
+        if ("desc".equalsIgnoreCase(filterRequestDto.sortDirection())) {
+            sort = Sort.by(Sort.Order.by(filterRequestDto.sortBy()));
+        } else {
+            sort = Sort.by(Sort.Order.by(filterRequestDto.sortBy()));
+        }
+        Pageable sortedPageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), sort);
+        Page<OrderDetailResponseDto> orderWithFilterAndSorting = orderRepository.findOrderWithFilterAndSorting(filterRequestDto.orderId(), filterRequestDto.customerId(), filterRequestDto.productId(), filterRequestDto.dateFrom(), filterRequestDto.dateTo(), sortedPageable);
 
         //2. 주문 ID 목록 추출
         List<Long> orderIds = orderWithFilterAndSorting.getContent().stream()
@@ -124,9 +151,12 @@ public class OrderServiceImpl implements OrderService{
                 order.id(),
                 order.customerId(),
                 order.customerName(),
-                order.orderStatus(),
+                order.status(),
                 orderItemMap.getOrDefault(order.id(), List.of()),
-                order.createdAt()
+                order.createdAt(),
+                order.receiverName(),
+                order.receiverPhone(),
+                order.receiverAddress()
         ));
 
         return result;
@@ -140,6 +170,6 @@ public class OrderServiceImpl implements OrderService{
     @Override
     public OrderDetailResponseDto getOrder(Long orderId) {
         Order order = orderRepository.findById(orderId).orElseThrow(() -> new IllegalArgumentException("Order not found"));
-        return new OrderDetailResponseDto(order.getId(), order.getCustomer().getId(), order.getCustomer().getName(), order.getOrderStatus(), OrderItemDetailResponseDto.mapEntityToDto(order.getOrderItemList()), order.getCreatedAt());
+        return new OrderDetailResponseDto(order.getId(), order.getCustomer().getId(), order.getCustomer().getName(), order.getStatus(), OrderItemDetailResponseDto.mapEntityToDto(order.getOrderItemList()), order.getCreatedAt(), order.getReceiverName(), order.getReceiverPhone(), order.getReceiverAddress());
     }
 }

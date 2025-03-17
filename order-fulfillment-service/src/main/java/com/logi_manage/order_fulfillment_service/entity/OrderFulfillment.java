@@ -1,6 +1,5 @@
 package com.logi_manage.order_fulfillment_service.entity;
 
-import com.logi_manage.order_fulfillment_service.constant.FulfillmentType;
 import com.logi_manage.order_fulfillment_service.constant.OrderFulfillmentStatus;
 import jakarta.persistence.*;
 import lombok.*;
@@ -40,6 +39,9 @@ public class OrderFulfillment {
     private OrderFulfillmentStatus status;
 
     private String remarks;
+
+    //출고일
+    private LocalDateTime shippedDate;
 
     @CreatedDate
     private LocalDateTime createdAt;

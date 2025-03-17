@@ -11,7 +11,9 @@ import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -129,7 +131,14 @@ public class StockInServiceImpl implements StockInService{
      */
     @Override
     public Page<StockInDetailResponseDto> getStockInList(StockInFilterRequestDto filterRequestDto, Pageable pageable) {
-        return stockInRepository.findStockInWithFilterAndSorting(filterRequestDto.productId(), filterRequestDto.warehouseId(), filterRequestDto.orderId(), filterRequestDto.status(), filterRequestDto.dateFrom(), filterRequestDto.dateTo(), pageable);
+        Sort sort;
+        if ("desc".equalsIgnoreCase(filterRequestDto.sortDirection())) {
+            sort = Sort.by(Sort.Order.by(filterRequestDto.sortBy()));
+        } else {
+            sort = Sort.by(Sort.Order.by(filterRequestDto.sortBy()));
+        }
+        Pageable sortedPageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), sort);
+        return stockInRepository.findStockInWithFilterAndSorting(filterRequestDto.productId(), filterRequestDto.warehouseId(), filterRequestDto.orderId(), filterRequestDto.status(), filterRequestDto.dateFrom(), filterRequestDto.dateTo(), sortedPageable);
     }
 
     /**

@@ -12,7 +12,9 @@ import com.logi_manage.inventory_service.repository.WarehouseRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -73,7 +75,14 @@ public class InventoryServiceImpl implements InventoryService{
      */
     @Override
     public Page<InventoryDetailResponseDto> getInventoryList(InventoryFilterRequestDto filterRequestDto, Pageable pageable) {
-        return inventoryRepository.findInventoryWithFilterAndSorting(filterRequestDto.warehouseId(), filterRequestDto.productId(), pageable);
+        Sort sort;
+        if ("desc".equalsIgnoreCase(filterRequestDto.sortDirection())) {
+            sort = Sort.by(Sort.Order.by(filterRequestDto.sortBy()));
+        } else {
+            sort = Sort.by(Sort.Order.by(filterRequestDto.sortBy()));
+        }
+        Pageable sortedPageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), sort);
+        return inventoryRepository.findInventoryWithFilterAndSorting(filterRequestDto.warehouseId(), filterRequestDto.productId(), sortedPageable);
     }
 
     /**

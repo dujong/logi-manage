@@ -16,7 +16,7 @@ import java.util.List;
 @Repository
 public interface OrderRepository extends JpaRepository<Order, Long> {
     @Query("SELECT new com.logi_manage.order_service.dto.response.OrderDetailResponseDto(" +
-            "o.id, c.id, c.name, o.orderStatus, o.createdAt) " +
+            "o.id, c.id, c.name, o.status, o.createdAt) " +
             "FROM Order o " +
             "JOIN o.customer c" +
             "JOIN o.orderItemList oi " +

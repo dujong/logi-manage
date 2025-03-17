@@ -31,11 +31,18 @@ public class Order {
 
     //주문 상태
     @Enumerated(value = EnumType.STRING)
-    private OrderStatus orderStatus;
+    private OrderStatus status;
 
     //주문아이템
     @OneToMany(mappedBy = "order", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<OrderItem> orderItemList = new ArrayList<>();
+
+    //수령인 이름
+    private String receiverName;
+    //수령인 연락처
+    private String receiverPhone;
+    //수령인 주소
+    private String receiverAddress;
 
     @CreatedDate
     private LocalDateTime createdAt;

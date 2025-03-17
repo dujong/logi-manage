@@ -1,23 +1,24 @@
 package com.logi_manage.order_fulfillment_service.service;
 
-import com.logi_manage.order_fulfillment_service.constant.OrderFulfillmentStatus;
 import com.logi_manage.order_fulfillment_service.dto.request.*;
 import com.logi_manage.order_fulfillment_service.dto.response.OrderFulfillmentDetailResponseDto;
 import com.logi_manage.order_fulfillment_service.entity.OrderFulfillment;
-import com.logi_manage.order_fulfillment_service.entity.StockIn;
 import com.logi_manage.order_fulfillment_service.repository.OrderFulfillmentRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
+import java.time.LocalDateTime;
+
 import static com.logi_manage.order_fulfillment_service.constant.OrderFulfillmentStatus.PROCESSING;
-import static com.logi_manage.order_fulfillment_service.constant.StockInStatus.APPROVED;
 
 @Slf4j
 @Transactional
@@ -79,6 +80,10 @@ public class OrderFulfillmentServiceImpl implements OrderFulfillmentService{
             return ResponseEntity.badRequest().body("Order-fulfillment status must be PROCESSING to update the quantity");
         }
 
+        //출고일 지정
+        orderFulfillment.setShippedDate(LocalDateTime.now());
+
+        //재고 수정
         UpdateInventoryRequestDto updateInventoryRequestDto = new UpdateInventoryRequestDto(updateOrderFulfillmentRequestDto.quantity());
         restTemplate.patchForObject("localhost:8084/inventories/" + updateOrderFulfillmentRequestDto.id(), updateInventoryRequestDto, Void.class);
 
@@ -93,7 +98,14 @@ public class OrderFulfillmentServiceImpl implements OrderFulfillmentService{
      */
     @Override
     public Page<OrderFulfillmentDetailResponseDto> getOrderFulfillmentList(OrderFulfillmentFilterRequestDto filterRequestDto, Pageable pageable) {
-        return orderFulfillmentRepository.findOrderFulfillmentWithFilterAndSorting(filterRequestDto.productId(), filterRequestDto.warehouseId(), filterRequestDto.orderId(), filterRequestDto.status(), filterRequestDto.dateFrom(), filterRequestDto.dateTo(), pageable);
+        Sort sort;
+        if ("desc".equalsIgnoreCase(filterRequestDto.sortDirection())) {
+            sort = Sort.by(Sort.Order.by(filterRequestDto.sortBy()));
+        } else {
+            sort = Sort.by(Sort.Order.by(filterRequestDto.sortBy()));
+        }
+        Pageable sortedPageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), sort);
+        return orderFulfillmentRepository.findOrderFulfillmentWithFilterAndSorting(filterRequestDto.productId(), filterRequestDto.warehouseId(), filterRequestDto.orderId(), filterRequestDto.status(), filterRequestDto.dateFrom(), filterRequestDto.dateTo(), sortedPageable);
     }
 
     /**

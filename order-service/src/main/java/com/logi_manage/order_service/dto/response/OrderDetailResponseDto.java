@@ -14,10 +14,16 @@ public record OrderDetailResponseDto(
         //고객 이름
         String customerName,
         //주문 상태
-        OrderStatus orderStatus,
+        OrderStatus status,
         //주문 아이템
         List<OrderItemDetailResponseDto> orderItemList,
         //주문 날짜
-        LocalDateTime createdAt
+        LocalDateTime createdAt,
+        //수령인 이름
+        String receiverName,
+        //수령인 연락처
+        String receiverPhone,
+        //수령인 주소
+        String receiverAddress
 ) {
 }
