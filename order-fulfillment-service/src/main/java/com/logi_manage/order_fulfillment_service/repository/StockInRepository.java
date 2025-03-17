@@ -24,9 +24,8 @@ public interface StockInRepository extends JpaRepository<StockIn, Long> {
             "AND (:warehouseId IS NULL OR si.warehouseId = :warehouseId) " +
             "AND (:orderId IS NULL OR si.orderId = :orderId) " +
             "AND (:status IS NULL OR si.status = :status) " +
-            ""
-
-
+            "AND (:dateFrom IS NULL OR si.createdAt >= :dateFrom) " +
+            "AND (:dateTo IS NULL OR si.createdAt <= :dateTo)"
     )
     Page<StockInDetailResponseDto> findStockInWithFilterAndSorting(
             @Param("productId") Long productId,
@@ -36,5 +35,20 @@ public interface StockInRepository extends JpaRepository<StockIn, Long> {
             @Param("dateFrom") LocalDateTime dateFrom,
             @Param("dateTo") LocalDateTime dateTo,
             Pageable pageable
+    );
+
+    @Query("SELECT new com.logi_manage.order_fulfillment_service.dto.response.StockInDetailResponseDto( " +
+            "si.id, si.orderId, si.productId, p.name, si.quantity, si.warehouseId, si.status, si.remarks, si.createdAt, si.modifiedAt" +
+            "FROM StockIn si " +
+            "JOIN Product p ON si.productId = p.id " +
+            "JOIN Warehouse w ON si.warehouseId = w.id " +
+            "WHERE (:stockId IS NULL OR si.id = :stockId) " +
+            "AND (:productId IS NULL OR si.productId = :productId) " +
+            "AND (:warehouseId IS NULL OR si.warehouseId = :warehouseId) "
+    )
+    StockInDetailResponseDto getStockInDto(
+            @Param("stockId") Long stockId,
+            @Param("productId") Long productId,
+            @Param("warehouseId") Long warehouseId
     );
 }

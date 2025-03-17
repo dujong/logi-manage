@@ -17,4 +17,6 @@ public interface StockInService {
     ResponseEntity<String> updateStockInQuantity(Long stockId, UpdateStockInRequestDto updateStockInRequestDto);
 
     Page<StockInDetailResponseDto> getStockInList(StockInFilterRequestDto filterRequestDto, Pageable pageable);
+
+    StockInDetailResponseDto getStockIn(Long stockId, StockInFilterRequestDto filterRequestDto);
 }
