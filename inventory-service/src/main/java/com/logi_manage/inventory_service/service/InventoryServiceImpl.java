@@ -172,4 +172,24 @@ public class InventoryServiceImpl implements InventoryService{
                 filterRequestDto.dateTo(),
                 pageable);
     }
+
+    /**
+     * 재고 수량 증가
+     * @param inventoryId 재고 id
+     * @param quantity 재고 수량
+     */
+    @Override
+    public void increaseInventory(Long inventoryId, int quantity) {
+        inventoryRepository.increaseInventoryQuantity(inventoryId, quantity);
+    }
+
+    /**
+     * 재고 수량 감소
+     * @param inventoryId 재고 id
+     * @param quantity 재고 수량
+     */
+    @Override
+    public void decreaseInventory(Long inventoryId, int quantity) {
+        inventoryRepository.decreaseInventory(inventoryId, quantity);
+    }
 }

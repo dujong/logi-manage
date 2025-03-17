@@ -5,6 +5,7 @@ import com.logi_manage.inventory_service.entity.Inventory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
@@ -24,4 +25,12 @@ public interface InventoryRepository extends JpaRepository<Inventory, Long> {
     );
 
     Optional<Inventory> findByProductIdAndWarehouseId(Long productId, Long warehouseId);
+
+    @Modifying
+    @Query("UPDATE Inventory i SET i.quantity = i.quantity + :quantity WHERE i.id = :inventoryId")
+    void increaseInventoryQuantity(Long inventoryId, int quantity);
+
+    @Modifying
+    @Query("UPDATE Inventory i SET i.quantity = i.quantity - :quantity WHERE i.id = :inventoryId AND i.quantity >= :quantity")
+    void decreaseInventory(Long inventoryId, int quantity);
 }

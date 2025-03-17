@@ -106,4 +106,28 @@ public class InventoryController {
         Page<TransferDetailResponseDto> inventoryTransfers = inventoryService.getInventoryTransfers(filterRequestDto, pageable);
         return ResponseEntity.ok(inventoryTransfers);
     }
+
+    /**
+     * 재고 수량 증가
+     * @param inventoryId 재고 id
+     * @param inventoryRequestDto 재고 증가 dto
+     */
+    @PatchMapping("/{inventoryId}/increase")
+    public ResponseEntity<Void> increaseInventory(@PathVariable Long inventoryId,
+                                                  @RequestBody UpdateInventoryRequestDto inventoryRequestDto) {
+        inventoryService.increaseInventory(inventoryId, inventoryRequestDto.quantity());
+        return ResponseEntity.noContent().build();
+    }
+
+    /**
+     * 재고 수량 감소
+     * @param inventoryId 재고 id
+     * @param inventoryRequestDto 재고 감소 dto
+     */
+    @PatchMapping("/{inventoryId}/decrease")
+    public ResponseEntity<Void> decreaseInventory(@PathVariable Long inventoryId,
+                                                  @RequestBody UpdateInventoryRequestDto inventoryRequestDto) {
+        inventoryService.decreaseInventory(inventoryId, inventoryRequestDto.quantity());
+        return ResponseEntity.noContent().build();
+    }
 }
