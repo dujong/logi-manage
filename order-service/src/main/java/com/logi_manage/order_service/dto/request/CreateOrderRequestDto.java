@@ -16,6 +16,15 @@ public record CreateOrderRequestDto(
         OrderStatus orderStatus,
         @Valid
         //주문 항목
-        List<CreateOrderItemRequestDto> createOrderItemRequestDtos
+        List<CreateOrderItemRequestDto> createOrderItemRequestDtos,
+        @NotNull
+        //수령인 이름
+        String receiverName,
+        @NotNull
+        //수령인 연락처
+        String receiverPhone,
+        @NotNull
+        //수령인 주소
+        String receiverAddress
 ) {
 }
