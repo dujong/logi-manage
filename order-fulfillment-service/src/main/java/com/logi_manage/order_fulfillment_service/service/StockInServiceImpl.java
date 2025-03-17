@@ -2,10 +2,7 @@ package com.logi_manage.order_fulfillment_service.service;
 
 import com.logi_manage.order_fulfillment_service.constant.OrderStatus;
 import com.logi_manage.order_fulfillment_service.constant.StockInStatus;
-import com.logi_manage.order_fulfillment_service.dto.request.StockInFilterRequestDto;
-import com.logi_manage.order_fulfillment_service.dto.request.StockInRequestDto;
-import com.logi_manage.order_fulfillment_service.dto.request.StockInVerifyRequestDto;
-import com.logi_manage.order_fulfillment_service.dto.request.UpdateStockInRequestDto;
+import com.logi_manage.order_fulfillment_service.dto.request.*;
 import com.logi_manage.order_fulfillment_service.dto.response.*;
 import com.logi_manage.order_fulfillment_service.entity.StockIn;
 import com.logi_manage.order_fulfillment_service.repository.OrderFulfillmentRepository;
@@ -20,14 +17,15 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
+import static com.logi_manage.order_fulfillment_service.constant.StockInStatus.*;
+
 @Slf4j
 @Transactional
 @RequiredArgsConstructor
 @Service
 public class StockInServiceImpl implements StockInService{
-
-    private final OrderFulfillmentRepository orderFulfillmentRepository;
     private final StockInRepository stockInRepository;
+
     private final RestTemplate restTemplate;
 
     private final String productServiceUrl = "localhost:8081/products/";
@@ -78,7 +76,7 @@ public class StockInServiceImpl implements StockInService{
                     .productId(stockInRequestDto.productId())
                     .quantity(stockInRequestDto.quantity())
                     .warehouseId(stockInRequestDto.warehouseId())
-                    .status(StockInStatus.PENDING)
+                    .status(PENDING)
                     .build();
             StockIn savedStockIn = stockInRepository.save(stockIn);
 
@@ -96,10 +94,9 @@ public class StockInServiceImpl implements StockInService{
     public ResponseEntity<String> verifyStockIn(StockInVerifyRequestDto stockInVerifyRequestDto) {
         StockIn stockIn = stockInRepository.findById(stockInVerifyRequestDto.id()).orElseThrow(() -> new EntityNotFoundException("StockIn not found"));
 
-        if (stockIn.getStatus() != StockInStatus.PENDING) {
+        if (stockIn.getStatus() != PENDING) {
             return ResponseEntity.badRequest().body("Only PENDING stock-in can be verified");
         }
-
 
         stockIn.setStatus(stockInVerifyRequestDto.status());
         stockIn.setRemarks(stockInVerifyRequestDto.remarks());
@@ -107,18 +104,20 @@ public class StockInServiceImpl implements StockInService{
     }
 
     /**
-     * 입고 확정
-     * @param stockId 확정된 입고 id
+     * 입고 승인
+     * @param stockId 승인된 입고 id
      * @param updateStockInRequestDto 입고 update dto
      */
     @Override
     public ResponseEntity<String> updateStockInQuantity(Long stockId, UpdateStockInRequestDto updateStockInRequestDto) {
         StockIn stockIn = stockInRepository.findById(stockId).orElseThrow(() -> new EntityNotFoundException("StockIn not found"));
 
-        if (stockIn.getStatus() != StockInStatus.APPROVED) {
+        if (stockIn.getStatus() != APPROVED) {
             return ResponseEntity.badRequest().body("Stock-in status must be APPROVED to update the quantity");
         }
-        stockIn.setQuantity(stockIn.getQuantity() + updateStockInRequestDto.quantity());
+
+        UpdateInventoryRequestDto updateInventoryRequestDto = new UpdateInventoryRequestDto(updateStockInRequestDto.quantity());
+        restTemplate.patchForObject(inventoryServiceUrl + updateStockInRequestDto.id(), updateInventoryRequestDto, Void.class);
         return ResponseEntity.noContent().build();
     }
 
@@ -131,5 +130,16 @@ public class StockInServiceImpl implements StockInService{
     @Override
     public Page<StockInDetailResponseDto> getStockInList(StockInFilterRequestDto filterRequestDto, Pageable pageable) {
         return stockInRepository.findStockInWithFilterAndSorting(filterRequestDto.productId(), filterRequestDto.warehouseId(), filterRequestDto.orderId(), filterRequestDto.status(), filterRequestDto.dateFrom(), filterRequestDto.dateTo(), pageable);
+    }
+
+    /**
+     * 입고 상세 조회
+     * @param stockId 조회할 입고 id
+     * @param filterRequestDto 필터링 dto
+     * @return 입고 상세 info
+     */
+    @Override
+    public StockInDetailResponseDto getStockIn(Long stockId, StockInFilterRequestDto filterRequestDto) {
+        return stockInRepository.getStockInDto(stockId, filterRequestDto.productId(), filterRequestDto.warehouseId());
     }
 }

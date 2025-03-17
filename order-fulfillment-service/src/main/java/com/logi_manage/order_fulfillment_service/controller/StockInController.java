@@ -22,25 +22,28 @@ public class StockInController {
 
     /**
      * 발주된 상품 입고 처리
+     *
      * @param stockInRequestDto 입고 처리 dto
      */
-    @PostMapping("/stock-in")
+    @PostMapping
     public ResponseEntity<String> processStockIn(@RequestBody StockInRequestDto stockInRequestDto) {
         return stockInService.processStockIn(stockInRequestDto);
     }
 
     /**
      * 입고 검수
+     *
      * @param stockInVerifyRequestDto 입고 검수 dto
      */
-    @PostMapping("/stock-in/verify")
+    @PostMapping("/verify")
     public ResponseEntity<String> verifyStockIn(@RequestBody StockInVerifyRequestDto stockInVerifyRequestDto) {
         return stockInService.verifyStockIn(stockInVerifyRequestDto);
     }
 
     /**
      * 입고 확정
-     * @param stockId 확정된 입고 id
+     *
+     * @param stockId                 확정된 입고 id
      * @param updateStockInRequestDto 입고 update dto
      */
     @PatchMapping("/{stockId}/update")
@@ -51,13 +54,26 @@ public class StockInController {
 
     /**
      * 입고 리스트 조회
+     *
      * @param filterRequestDto 필터링 dto
-     * @param pageable 페이징
+     * @param pageable         페이징
      * @return 입고 리스트
      */
     @GetMapping("/history")
-    public ResponseEntity<Page<StockInDetailResponseDto>> getOrderFulfillmentList(StockInFilterRequestDto filterRequestDto, Pageable pageable) {
+    public ResponseEntity<Page<StockInDetailResponseDto>> getStockInList(StockInFilterRequestDto filterRequestDto, Pageable pageable) {
         Page<StockInDetailResponseDto> stockInList = stockInService.getStockInList(filterRequestDto, pageable);
         return ResponseEntity.ok(stockInList);
+    }
+
+    /**
+     * 입고 상세 조회
+     * @param stockId 조회할 입고 id
+     * @param filterRequestDto 필터링 dto
+     * @return 입고 상세 info
+     */
+    @GetMapping("/{stockId}")
+    public ResponseEntity<StockInDetailResponseDto> getStockIn(Long stockId, StockInFilterRequestDto filterRequestDto) {
+        StockInDetailResponseDto stockIn = stockInService.getStockIn(stockId, filterRequestDto);
+        return ResponseEntity.ok(stockIn);
     }
 }
