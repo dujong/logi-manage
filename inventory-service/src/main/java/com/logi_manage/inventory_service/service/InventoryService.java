@@ -20,4 +20,8 @@ public interface InventoryService {
     void transferInventory(InventoryTransferRequestDto transferRequestDto);
 
     Page<TransferDetailResponseDto> getInventoryTransfers(TransferFilterRequestDto filterRequestDto, Pageable pageable);
+
+    void increaseInventory(Long inventoryId, int quantity);
+
+    void decreaseInventory(Long inventoryId, int quantity);
 }

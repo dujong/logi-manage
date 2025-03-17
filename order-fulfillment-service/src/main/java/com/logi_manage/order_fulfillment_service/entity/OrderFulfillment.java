@@ -23,22 +23,23 @@ public class OrderFulfillment {
     @Column(name = "order_fulfillment_id")
     private Long id;
 
-    //입출고 type
-    @Enumerated(value = EnumType.STRING)
-    private FulfillmentType type;
-
     //상품 id
     private Long productId;
 
     //창고 id
     private Long warehouseId;
 
+    //주문 id
+    private Long orderId;
+
     //입출고 수량
     private int quantity;
 
     //처리 상태
     @Enumerated(value = EnumType.STRING)
-    private OrderFulfillmentStatus orderFulfillmentStatus;
+    private OrderFulfillmentStatus status;
+
+    private String remarks;
 
     @CreatedDate
     private LocalDateTime createdAt;
