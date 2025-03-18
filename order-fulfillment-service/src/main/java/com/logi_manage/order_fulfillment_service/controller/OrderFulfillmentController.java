@@ -48,6 +48,7 @@ public class OrderFulfillmentController {
      *
      * @param verifyRequestDto 출고 검수 dto
      */
+    //TODO: PathVariable로 id 받자 그게 REST FUL
     @PostMapping("/verify")
     public ResponseEntity<String> verifyOrderFulfillment(@RequestBody OrderFulfillmentVerifyRequestDto verifyRequestDto) {
         return orderFulfillmentService.verifyOrderFulfillment(verifyRequestDto);
