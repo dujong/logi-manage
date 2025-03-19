@@ -48,7 +48,11 @@ public class ReturnRefundController {
         return returnRefundService.verifyRefund(refundId, verifyRequestDto);
     }
 
-
+    /**
+     * 반품 상태 업데이트
+     * @param refundId 업데이트 반품 id
+     * @param updateReturnRefundRequestDto 반품 dto
+     */
     @PostMapping("/refunds/{refundId}/update")
     public ResponseEntity<String> updateRefund(@PathVariable Long refundId, @RequestBody UpdateReturnRefundRequestDto updateReturnRefundRequestDto) {
         return returnRefundService.updateRefund(refundId, updateReturnRefundRequestDto);
@@ -65,4 +69,6 @@ public class ReturnRefundController {
         Long returnId = returnRefundService.createReturn(requestDto);
         return ResponseEntity.ok(returnId);
     }
+
+
 }
