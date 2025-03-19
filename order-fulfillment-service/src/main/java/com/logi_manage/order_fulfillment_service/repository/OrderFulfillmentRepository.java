@@ -19,7 +19,6 @@ public interface OrderFulfillmentRepository extends JpaRepository<OrderFulfillme
             "of.id, of.orderId, of.productId, p.name, of.quantity, of.warehouseId, of.status, of.remarks, of.createdAt, of.modifiedAt" +
             "FROM OrderFulfillment of " +
             "JOIN Product p ON of.productId = p.id " +
-            "JOIN Warehouse w ON of.warehouseId = w.id " +
             "WHERE (:productId IS NULL OR of.productId = :productId) " +
             "AND (:warehouseId IS NULL OR of.warehouseId = :warehouseId) " +
             "AND (:orderId IS NULL OR of.orderId = :orderId) " +
@@ -41,14 +40,26 @@ public interface OrderFulfillmentRepository extends JpaRepository<OrderFulfillme
             "of.id, of.orderId, of.productId, p.name, of.quantity, of.warehouseId, of.status, of.remarks, of.createdAt, of.modifiedAt" +
             "FROM OrderFulfillment of " +
             "JOIN Product p ON of.productId = p.id " +
-            "JOIN Warehouse w ON of.warehouseId = w.id " +
             "WHERE (:orderFulfillmentId IS NULL OR of.id = :orderFulfillmentId) " +
             "AND (:productId IS NULL OR of.productId = :productId) " +
             "AND (:warehouseId IS NULL OR of.warehouseId = :warehouseId) "
     )
-    OrderFulfillmentDetailResponseDto getOrderFulfillmentDto(
+    OrderFulfillmentDetailResponseDto getOrderFulfillmentByProductIdAndWarehouseId(
             @Param("orderFulfillmentId") Long orderFulfillmentId,
             @Param("productId") Long productId,
             @Param("warehouseId") Long warehouseId
+    );
+
+    @Query("SELECT new com.logi_manage.order_fulfillment_service.dto.response.StockInDetailResponseDto( " +
+            "of.id, of.orderId, of.productId, of.quantity, of.warehouseId, of.status, of.remarks, of.createdAt, of.modifiedAt" +
+            "FROM OrderFulfillment of " +
+            "WHERE (:orderId IS NULL OR of.orderId = :orderId) " +
+            "AND (:orderItemId IS NULL OR of.orderItemId = :orderItemId) " +
+            "AND (:productId IS NULL OR of.productId = :productId) "
+    )
+    OrderFulfillmentDetailResponseDto getOrderFulfillmentByOrderIdAndOrderItemIdAndProductId(
+            @Param("orderId") Long orderId,
+            @Param("orderItemId") Long orderItemId,
+            @Param("productId") Long productId
     );
 }

@@ -1,8 +1,8 @@
 package com.logi_manage.order_fulfillment_service.entity;
 
+import com.logi_manage.order_fulfillment_service.constant.ReturnRefundReason;
 import com.logi_manage.order_fulfillment_service.constant.ReturnRefundStatus;
 import com.logi_manage.order_fulfillment_service.constant.ReturnRefundType;
-import com.logi_manage.order_fulfillment_service.constant.ShippingStatus;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
@@ -27,16 +27,29 @@ public class ReturnRefund {
     //주문 id
     private Long orderId;
 
+    //주문 아이템 id
+    private Long orderItemId;
+
     //상품 id
     private Long productId;
+
+    //주문자 id
+    private Long customerId;
 
     //유형
     @Enumerated(value = EnumType.STRING)
     private ReturnRefundType returnRefundType;
 
+    //환불,반품 사유
+    @Enumerated(value = EnumType.STRING)
+    private ReturnRefundReason returnRefundReason;
+
     //처리 상태
     @Enumerated(value = EnumType.STRING)
-    private ReturnRefundStatus returnRefundStatus;
+    private ReturnRefundStatus status;
+
+    //검수 의견
+    private String remarks;
 
     @CreatedDate
     private LocalDateTime createdAt;
