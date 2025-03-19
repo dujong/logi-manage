@@ -5,6 +5,8 @@ import com.logi_manage.shipment_service.constant.ShippingStatus;
 public record UpdateShipmentRequestDto(
         //주문 id
         Long orderId,
+        //주문 아이템 id,
+        Long orderItemId,
         //고객 id
         Long customerId,
         //출고 id

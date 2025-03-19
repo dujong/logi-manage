@@ -1,5 +1,6 @@
 package com.logi_manage.shipment_service.controller;
 
+import com.logi_manage.shipment_service.constant.ShippingStatus;
 import com.logi_manage.shipment_service.dto.request.CreateShipmentRequestDto;
 import com.logi_manage.shipment_service.dto.request.ShipmentFilterRequestDto;
 import com.logi_manage.shipment_service.dto.request.UpdateShipmentRequestDto;
@@ -26,6 +27,7 @@ public class ShipmentController {
      * - [O] 배송 목록 조회
      * - [O] 배송 상세 조회
      * - [O] 배송 완료 확인
+     * - [O] 배송 상태 조회
      */
 
     /**
@@ -85,5 +87,16 @@ public class ShipmentController {
     public ResponseEntity<Void> completeShipment(@PathVariable Long shipmentId) {
         shipmentService.completeShipment(shipmentId);
         return ResponseEntity.noContent().build();
+    }
+
+    /**
+     * 배송 상태 확인
+     * @param orderItemId 주문 아이템 id
+     * @return 배송 상태
+     */
+    @GetMapping("/{orderItemId}/status")
+    public ResponseEntity<ShippingStatus> getShipmentStatus(@PathVariable Long orderItemId) {
+        ShippingStatus shipmentStatus = shipmentService.getShipmentStatus(orderItemId);
+        return ResponseEntity.ok(shipmentStatus);
     }
 }

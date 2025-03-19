@@ -1,5 +1,6 @@
 package com.logi_manage.shipment_service.service;
 
+import com.logi_manage.shipment_service.constant.ShippingStatus;
 import com.logi_manage.shipment_service.dto.request.CreateShipmentRequestDto;
 import com.logi_manage.shipment_service.dto.request.ShipmentFilterRequestDto;
 import com.logi_manage.shipment_service.dto.request.UpdateShipmentRequestDto;
@@ -17,4 +18,6 @@ public interface ShipmentService {
     ShipmentDetailResponseDto getShipment(Long shipmentId);
 
     void completeShipment(Long shipmentId);
+
+    ShippingStatus getShipmentStatus(Long orderItemId);
 }
