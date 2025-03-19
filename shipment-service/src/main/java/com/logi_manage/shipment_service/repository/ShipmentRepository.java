@@ -21,11 +21,21 @@ public interface ShipmentRepository extends JpaRepository<Shipment, Long> {
             "JOIN Customer c ON s.customerId = c.id " +
             "JOIN OrderFulfillment of ON s.orderFulfillmentId = of.id " +
             "JOIN Order o ON s.orderId = o.id " +
-            "WHERE "
-
+            "WHERE (:orderId IS NULL OR s.orderId = :orderId) " +
+            "AND (:orderItemId IS NULL OR EXISTS (SELECT 1 FROM OrderItem oi WHERE oi.orderId = s.orderId AND oi.id = :orderItemId)) " +
+            "AND (:customerId IS NULL OR s.customerId = :customerId) " +
+            "AND (:orderFulfillmentId IS NULL OR s.orderFulfillmentId = :orderFulfillmentId) " +
+            "AND (:status IS NULL OR s.status = :status) " +
+            "AND (:trackingNumber IS NULL OR s.trackingNumber LIKE %:trackingNumber%) " +
+            "AND (:courierName IS NULL OR s.courierName LIKE %:courierName%) " +
+            "AND (:deliveredAfter IS NULL OR s.deliveredDate >= :deliveredAfter) " +
+            "AND (:deliveredBefore IS NULL OR s.deliveredDate <= :deliveredBefore) " +
+            "AND (:shippedAfter IS NULL OR of.shippedDate >= :shippedAfter) " +
+            "AND (:shippedBefore IS NULL OR of.shippedDate <= :shippedBefore) "
     )
     Page<ShipmentDetailResponseDto> findShipmentWithFilterAndSorting(
             @Param("orderId") Long orderId,
+            @Param("orderItemId") Long orderItemId,
             @Param("customerId") Long customerId,
             @Param("orderFulfillmentId") Long orderFulfillmentId,
             @Param("status") ShippingStatus status,
@@ -58,4 +68,5 @@ public interface ShipmentRepository extends JpaRepository<Shipment, Long> {
             "WHERE of.id = :orderFulfillmentId")
     int findQuantityByOrderFulfillmentId(@Param("orderFulfillmentId") Long orderFulfillmentId);
 
+    ShippingStatus findShippingStatusByOrderItemId(Long orderItemId);
 }

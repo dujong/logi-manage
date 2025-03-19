@@ -25,6 +25,9 @@ public class Shipment {
     //주문 id
     private Long orderId;
 
+    // 주문 항목 ID
+    private Long orderItemId;
+
     //주문자 id
     private Long customerId;
 

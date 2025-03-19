@@ -62,6 +62,10 @@ public class ShipmentServiceImpl implements ShipmentService{
             shipment.setOrderId(updateShipmentRequestDto.orderId());
         }
 
+        if (updateShipmentRequestDto.orderItemId() != null) {
+            shipment.setOrderItemId(updateShipmentRequestDto.orderItemId());
+        }
+
         if (updateShipmentRequestDto.customerId() != null) {
             shipment.setCustomerId(updateShipmentRequestDto.customerId());
         }
@@ -109,8 +113,9 @@ public class ShipmentServiceImpl implements ShipmentService{
             sort = Sort.by(Sort.Order.by(filterRequestDto.sortBy()));
         }
         Pageable sortedPageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), sort);
-        Page<ShipmentDetailResponseDto> shipmentWithFilterAndSorting = shipmentRepository.findShipmentWithFilterAndSorting(
+        return shipmentRepository.findShipmentWithFilterAndSorting(
                 filterRequestDto.orderId(),
+                filterRequestDto.orderItemId(),
                 filterRequestDto.customerId(),
                 filterRequestDto.orderFulfillmentId(),
                 filterRequestDto.status(),
@@ -122,7 +127,6 @@ public class ShipmentServiceImpl implements ShipmentService{
                 filterRequestDto.shippedBefore(),
                 sortedPageable
         );
-        return shipmentWithFilterAndSorting;
     }
 
     /**
@@ -147,5 +151,15 @@ public class ShipmentServiceImpl implements ShipmentService{
         shipment.setStatus(ShippingStatus.DELIVERED);
         //배송완료일 저장
         shipment.setDeliveredDate(LocalDateTime.now());
+    }
+
+    /**
+     * 배송 상태 확인
+     * @param orderItemId 주문 아이템 id
+     * @return 배송 상태
+     */
+    @Override
+    public ShippingStatus getShipmentStatus(Long orderItemId) {
+        return shipmentRepository.findShippingStatusByOrderItemId(orderItemId);
     }
 }

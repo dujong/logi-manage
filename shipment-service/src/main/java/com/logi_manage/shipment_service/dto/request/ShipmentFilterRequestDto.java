@@ -7,6 +7,8 @@ import java.time.LocalDateTime;
 public record ShipmentFilterRequestDto(
         //주문 id
         Long orderId,
+        //주문 아이템 id
+        Long orderItemId,
         //주문자 id
         Long customerId,
         //출고 id
