@@ -1,10 +1,14 @@
 package com.logi_manage.order_service.service;
 
+import com.logi_manage.order_service.constant.OrderStatus;
+import com.logi_manage.order_service.constant.ShippingStatus;
 import com.logi_manage.order_service.dto.request.CreateOrderRequestDto;
 import com.logi_manage.order_service.dto.request.OrderFilterRequestDto;
 import com.logi_manage.order_service.dto.request.UpdateOrderStatusRequestDto;
+import com.logi_manage.order_service.dto.response.CancelOrderResponseDto;
 import com.logi_manage.order_service.dto.response.OrderDetailResponseDto;
 import com.logi_manage.order_service.dto.response.OrderItemDetailResponseDto;
+import com.logi_manage.order_service.dto.response.OrderItemsStatusResponseDto;
 import com.logi_manage.order_service.entity.Customer;
 import com.logi_manage.order_service.entity.Order;
 import com.logi_manage.order_service.entity.OrderItem;
@@ -19,8 +23,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.client.RestTemplate;
 
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -33,6 +39,8 @@ public class OrderServiceImpl implements OrderService{
     private final OrderRepository orderRepository;
     private final OrderItemRepository orderItemRepository;
     private final CustomerRepository customerRepository;
+
+    private final RestTemplate restTemplate;
 
     /**
      * 신규 주문 생성
@@ -102,10 +110,42 @@ public class OrderServiceImpl implements OrderService{
     /**
      * 주문 취소
      * @param orderId 취소할 주문 id
+     * @return 주문 취소 info list
      */
     @Override
-    public void deleteOrder(Long orderId) {
-        orderRepository.deleteById(orderId);
+    public CancelOrderResponseDto cancelOrder(Long orderId) {
+        Order order = orderRepository.findById(orderId).orElseThrow(() -> new IllegalArgumentException("Order not found"));
+        List<OrderItemsStatusResponseDto> orderItemResponses = new ArrayList<>();
+
+        for (OrderItem orderItem : order.getOrderItemList()) {
+            //배송이 진행중인지 체크
+            ShippingStatus shippingStatus = restTemplate.getForObject("localhost:8087/shipments/"+orderItem.getId()+"/status", ShippingStatus.class);
+
+            //배송이 진행중인 경우
+            if (shippingStatus != ShippingStatus.PENDING) {
+                orderItemResponses.add(new OrderItemsStatusResponseDto(
+                        orderItem.getId(),
+                        shippingStatus,
+                        "Item cannot be canceled, shipment already started"
+                ));
+            } else {
+                orderItemResponses.add(new OrderItemsStatusResponseDto(
+                        orderItem.getId(),
+                        shippingStatus,
+                        "Item can be canceled"
+                ));
+            }
+        }
+
+        //주문된 모든 item list 배송 시작 상태가 아닐 때 주문 취소 상태 변경
+        boolean canCancel = orderItemResponses.stream().allMatch(item -> item.status() == ShippingStatus.PENDING);
+
+        if (canCancel) {
+            order.setStatus(OrderStatus.CANCELED);
+            return null;
+        } else {
+            return new CancelOrderResponseDto(order.getId(), orderItemResponses);
+        }
     }
 
     /**
