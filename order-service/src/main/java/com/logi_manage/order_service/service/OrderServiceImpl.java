@@ -5,7 +5,7 @@ import com.logi_manage.order_service.constant.ShippingStatus;
 import com.logi_manage.order_service.dto.request.CreateOrderRequestDto;
 import com.logi_manage.order_service.dto.request.OrderFilterRequestDto;
 import com.logi_manage.order_service.dto.request.UpdateOrderStatusRequestDto;
-import com.logi_manage.order_service.dto.response.DeleteOrderResponseDto;
+import com.logi_manage.order_service.dto.response.CancelOrderResponseDto;
 import com.logi_manage.order_service.dto.response.OrderDetailResponseDto;
 import com.logi_manage.order_service.dto.response.OrderItemDetailResponseDto;
 import com.logi_manage.order_service.dto.response.OrderItemsStatusResponseDto;
@@ -113,7 +113,7 @@ public class OrderServiceImpl implements OrderService{
      * @return 주문 취소 info list
      */
     @Override
-    public DeleteOrderResponseDto deleteOrder(Long orderId) {
+    public CancelOrderResponseDto cancelOrder(Long orderId) {
         Order order = orderRepository.findById(orderId).orElseThrow(() -> new IllegalArgumentException("Order not found"));
         List<OrderItemsStatusResponseDto> orderItemResponses = new ArrayList<>();
 
@@ -144,7 +144,7 @@ public class OrderServiceImpl implements OrderService{
             order.setStatus(OrderStatus.CANCELED);
             return null;
         } else {
-            return new DeleteOrderResponseDto(order.getId(), orderItemResponses);
+            return new CancelOrderResponseDto(order.getId(), orderItemResponses);
         }
     }
 

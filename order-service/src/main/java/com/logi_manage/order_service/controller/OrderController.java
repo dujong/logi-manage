@@ -3,9 +3,8 @@ package com.logi_manage.order_service.controller;
 import com.logi_manage.order_service.dto.request.CreateOrderRequestDto;
 import com.logi_manage.order_service.dto.request.OrderFilterRequestDto;
 import com.logi_manage.order_service.dto.request.UpdateOrderStatusRequestDto;
-import com.logi_manage.order_service.dto.response.DeleteOrderResponseDto;
+import com.logi_manage.order_service.dto.response.CancelOrderResponseDto;
 import com.logi_manage.order_service.dto.response.OrderDetailResponseDto;
-import com.logi_manage.order_service.dto.response.OrderItemsStatusResponseDto;
 import com.logi_manage.order_service.service.OrderService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -13,8 +12,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 
 @Slf4j
@@ -61,10 +58,10 @@ public class OrderController {
      * @param orderId 취소할 주문 id
      * @return 주문 취소 info list
      */
-    @DeleteMapping("/{orderId}")
-    public ResponseEntity<DeleteOrderResponseDto> deleteOrder(@PathVariable Long orderId) {
-        DeleteOrderResponseDto deleteOrderResponseDto = orderService.deleteOrder(orderId);
-        return ResponseEntity.ok(deleteOrderResponseDto);
+    @PostMapping("/{orderId}/cancel")
+    public ResponseEntity<CancelOrderResponseDto> cancelOrder(@PathVariable Long orderId) {
+        CancelOrderResponseDto cancelOrderResponseDto = orderService.cancelOrder(orderId);
+        return ResponseEntity.ok(cancelOrderResponseDto);
     }
 
     /**
