@@ -1,7 +1,6 @@
 package com.logi_manage.order_fulfillment_service.entity;
 
-import com.logi_manage.order_fulfillment_service.constant.RefundReason;
-import com.logi_manage.order_fulfillment_service.constant.ReturnReason;
+import com.logi_manage.order_fulfillment_service.constant.ReturnRefundReason;
 import com.logi_manage.order_fulfillment_service.constant.ReturnRefundStatus;
 import com.logi_manage.order_fulfillment_service.constant.ReturnRefundType;
 import jakarta.persistence.*;
@@ -41,13 +40,9 @@ public class ReturnRefund {
     @Enumerated(value = EnumType.STRING)
     private ReturnRefundType returnRefundType;
 
-    //반품 사유
+    //환불,반품 사유
     @Enumerated(value = EnumType.STRING)
-    private ReturnReason returnReason;
-
-    //환불 사유
-    @Enumerated(value = EnumType.STRING)
-    private RefundReason refundReason;
+    private ReturnRefundReason returnRefundReason;
 
     //처리 상태
     @Enumerated(value = EnumType.STRING)

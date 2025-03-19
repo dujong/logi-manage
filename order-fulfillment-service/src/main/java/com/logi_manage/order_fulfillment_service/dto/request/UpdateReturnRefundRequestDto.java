@@ -1,13 +1,14 @@
 package com.logi_manage.order_fulfillment_service.dto.request;
 
-import com.logi_manage.order_fulfillment_service.constant.RefundReason;
-import com.logi_manage.order_fulfillment_service.constant.ReturnReason;
+import com.logi_manage.order_fulfillment_service.constant.ReturnRefundReason;
 import com.logi_manage.order_fulfillment_service.constant.ReturnRefundStatus;
 
 public record UpdateReturnRefundRequestDto(
-        //반품 사유
-        ReturnReason returnReason,
-        //환불 사유
-        RefundReason refundReason
+        //환불, 반품 사유
+        ReturnRefundReason returnRefundReason,
+        //처리 상태
+        ReturnRefundStatus status,
+        //사유
+        String remarks
 ) {
 }
