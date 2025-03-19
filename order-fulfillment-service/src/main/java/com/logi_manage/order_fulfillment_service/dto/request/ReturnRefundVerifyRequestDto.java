@@ -1,11 +1,12 @@
 package com.logi_manage.order_fulfillment_service.dto.request;
 
-import com.logi_manage.order_fulfillment_service.constant.ReturnRefundStatus;
+import com.logi_manage.order_fulfillment_service.constant.RefundReason;
+import com.logi_manage.order_fulfillment_service.constant.ReturnReason;
 
 public record ReturnRefundVerifyRequestDto(
-        //상태
-        ReturnRefundStatus status,
-        //검수 의견
-        String remarks
+        //반품 사유
+        ReturnReason returnReason,
+        //환불 사유
+        RefundReason refundReason
 ) {
 }

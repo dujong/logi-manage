@@ -7,6 +7,8 @@ import com.logi_manage.order_fulfillment_service.constant.ReturnRefundStatus;
 public record ReturnRefundRequestDto(
         //주문 id
         Long orderId,
+        //주문 아이템 id,
+        Long orderItemId,
         //상품 id
         Long productId,
         //고객 id

@@ -28,6 +28,9 @@ public class ReturnRefund {
     //주문 id
     private Long orderId;
 
+    //주문 아이템 id
+    private Long orderItemId;
+
     //상품 id
     private Long productId;
 
