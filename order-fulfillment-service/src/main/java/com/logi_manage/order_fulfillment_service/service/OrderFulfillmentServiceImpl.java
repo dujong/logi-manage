@@ -116,6 +116,6 @@ public class OrderFulfillmentServiceImpl implements OrderFulfillmentService{
      */
     @Override
     public OrderFulfillmentDetailResponseDto getOrderFulfillment(Long orderFulfillmentId, OrderFulfillmentFilterRequestDto filterRequestDto) {
-        return orderFulfillmentRepository.getOrderFulfillmentDto(orderFulfillmentId, filterRequestDto.productId(), filterRequestDto.warehouseId());
+        return orderFulfillmentRepository.getOrderFulfillmentByProductIdAndWarehouseId(orderFulfillmentId, filterRequestDto.productId(), filterRequestDto.warehouseId());
     }
 }

@@ -1,16 +1,17 @@
 package com.logi_manage.order_fulfillment_service.controller;
 
+import com.logi_manage.order_fulfillment_service.dto.request.ReturnRefundFilterRequestDto;
 import com.logi_manage.order_fulfillment_service.dto.request.ReturnRefundRequestDto;
 import com.logi_manage.order_fulfillment_service.dto.request.ReturnRefundVerifyRequestDto;
 import com.logi_manage.order_fulfillment_service.dto.request.UpdateReturnRefundRequestDto;
+import com.logi_manage.order_fulfillment_service.dto.response.ReturnRefundDetailResponseDto;
 import com.logi_manage.order_fulfillment_service.service.ReturnRefundService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -20,15 +21,16 @@ public class ReturnRefundController {
     /**
      * list up
      * - [O]  반품 요청
-     * - [ ]  반품 검수 및 상태 변경
+     * - [O]  반품 검수 및 상태 변경
      * - [O]  환불 요청
-     * - [ ]  환불 상태 변경
-     * - [ ]  반품된 상품의 재고 처리
+     * - [O]  환불 상태 변경
+     * - [O]  반품/환불 내역 조회
      */
     private final ReturnRefundService returnRefundService;
 
     /**
      * 반품 요청
+     *
      * @param requestDto 반품 요청 dto
      * @return 요청된 반품 id
      */
@@ -39,18 +41,20 @@ public class ReturnRefundController {
     }
 
     /**
-     * 반품 검수
-     * @param refundId 검수할 반품 id
+     * 반품, 환불 검수
+     *
+     * @param returnRefundId         검수할 반품, 환불 id
      * @param verifyRequestDto 검수 dto
      */
-    @PostMapping("/refunds/{refundId}/verify")
-    public ResponseEntity<String> verifyRefund(@PathVariable Long refundId, @RequestBody ReturnRefundVerifyRequestDto verifyRequestDto) {
-        return returnRefundService.verifyRefund(refundId, verifyRequestDto);
+    @PostMapping("/return-refund/{refundId}/verify")
+    public ResponseEntity<String> verifyRefund(@PathVariable Long returnRefundId, @RequestBody ReturnRefundVerifyRequestDto verifyRequestDto) {
+        return returnRefundService.verifyReturnRefund(returnRefundId, verifyRequestDto);
     }
 
     /**
      * 반품 상태 업데이트
-     * @param refundId 업데이트 반품 id
+     *
+     * @param refundId                     업데이트 반품 id
      * @param updateReturnRefundRequestDto 반품 dto
      */
     @PostMapping("/refunds/{refundId}/update")
@@ -61,6 +65,7 @@ public class ReturnRefundController {
 
     /**
      * 환불 요청
+     *
      * @param requestDto 환불 요청 dto
      * @return 요청된 환불 id
      */
@@ -70,5 +75,25 @@ public class ReturnRefundController {
         return ResponseEntity.ok(returnId);
     }
 
+    /**
+     * 환불 상태 업데이트
+     * @param returnId                     업데이트 환불 id
+     * @param updateReturnRefundRequestDto 환불 dto
+     */
+    @PostMapping("/returns/{returnId}/update")
+    public ResponseEntity<String> updateReturn(@PathVariable Long returnId, @RequestBody UpdateReturnRefundRequestDto updateReturnRefundRequestDto) {
+        return returnRefundService.updateReturn(returnId, updateReturnRefundRequestDto);
+    }
 
+    /**
+     * 반품/환불 내역 조회
+     * @param filterRequestDto 필터링 dto
+     * @param pageable 페이징
+     * @return 반품/환불 list
+     */
+    @GetMapping("/return-refund")
+    public ResponseEntity<?> getReturnRefundList(ReturnRefundFilterRequestDto filterRequestDto, Pageable pageable) {
+        Page<ReturnRefundDetailResponseDto> returnRefundList = returnRefundService.getReturnRefundList(filterRequestDto, pageable);
+        return ResponseEntity.ok(returnRefundList);
+    }
 }
